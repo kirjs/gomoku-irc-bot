@@ -1,0 +1,30 @@
+{
+  "name": "gomoku-irc-bot",
+  "version": "0.0.0",
+  "description": "A simple irc bot that allows two people to play gomoku",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kirjs/gomoku-irc-bot"
+  },
+  "keywords": [
+    "gomoku",
+    "irc",
+    "bot"
+  ],
+  "author": "kirjs",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/kirjs/gomoku-irc-bot/issues"
+  },
+  "dependencies": {
+    "ziggy": "~1.2.0",
+    "gomoku-tools": "0.0.23"
+  },
+  "devDependencies": {
+    "jest-cli": "~0.1.17"
+  }
+}
