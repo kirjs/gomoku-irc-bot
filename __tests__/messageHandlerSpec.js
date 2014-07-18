@@ -35,6 +35,12 @@ describe('messageHandler', function () {
         it('Returns the value for existing action', function () {
             expect(this.handler.handleMessage('test')).toBe(1);
         });
+
+        it('Strips "$" from the action name ', function () {
+            expect(this.handler.handleMessage('$test')).toBe(1);
+            expect(this.handler.handleMessage('test$')).toBe(1);
+            expect(this.handler.handleMessage('$t$e$s$t$')).toBe(1);
+        });
         it('Does not change the state after handling the message', function () {
             expect(this.handler.handleMessage('test')).toBe(1);
             expect(this.handler.handleMessage('test')).toBe(1);
