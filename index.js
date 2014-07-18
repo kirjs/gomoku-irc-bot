@@ -1,5 +1,5 @@
 var Ziggy = require('ziggy').Ziggy;
-var dumbPlugin = require('./lib/plugins/gomoku-game.js');
+var dumbPlugin = require('./lib/ziggyAdapter');
 
 var ziggy = new Ziggy({
     server: 'irc.freenode.org',
