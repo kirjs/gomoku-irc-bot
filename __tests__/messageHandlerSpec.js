@@ -10,6 +10,9 @@ describe('messageHandler', function () {
                 },
                 next$state: function () {
                     return 'b';
+                },
+                $default: function(){
+                    return 'default';
                 }
             },
             b: {
@@ -21,7 +24,11 @@ describe('messageHandler', function () {
         this.handler = new MessageHandler(states, 'a');
     });
     describe('Action handler', function () {
+        it('Runs default action if the named one does not exist', function () {
+            expect(this.handler.handleMessage('somithing')).toBe('default');
+        });
         it('Does nothing when an action does not exist', function () {
+            this.handler.setState('b');
             expect(this.handler.handleMessage('somithing')).toBe(undefined);
         });
 
