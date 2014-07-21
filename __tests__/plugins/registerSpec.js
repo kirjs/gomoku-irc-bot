@@ -18,7 +18,7 @@ describe('register state', function () {
         expect(this.registerHandler.play('bebe')).toContain('bebe');
         expect(this.registerHandler.play$state()).toBeUndefined();
         expect(this.registerHandler.play('mememe')).toContain('mememe');
-        expect(this.registerHandler.play$state()).toBe('register');
+        expect(this.registerHandler.play$state()).toBe('play');
     });
 
 
