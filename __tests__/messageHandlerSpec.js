@@ -3,6 +3,7 @@ var MessageHandler = require('../lib/messageHandler');
 
 describe('messageHandler', function () {
     beforeEach(function () {
+        this.bWasReset = false;
         var states = {
             a: {
                 test: function () {
@@ -11,11 +12,14 @@ describe('messageHandler', function () {
                 next$state: function () {
                     return 'b';
                 },
-                $default: function(){
+                $default: function () {
                     return 'default';
                 }
             },
             b: {
+                $reset: function () {
+                    this.bWasReset = true;
+                }.bind(this),
                 test: function () {
                     return 2;
                 }
@@ -52,6 +56,12 @@ describe('messageHandler', function () {
         it('Allows to change the state manually', function () {
             this.handler.setState('b');
             expect(this.handler.handleMessage('test')).toBe(2);
+        });
+
+        it('Resets the state when switching to it', function () {
+            expect(this.bWasReset).toBe(false);
+            this.handler.setState('b');
+            expect(this.bWasReset).toBe(true);
         });
 
         it('Allows to change the state as with a handler', function () {
