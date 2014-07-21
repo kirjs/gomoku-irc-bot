@@ -6,22 +6,22 @@ describe('messageHandler', function () {
         this.bWasReset = false;
         var states = {
             a: {
-                test: function () {
-                    return 1;
+                test: function ( a ) {
+                    return a;
                 },
                 next$state: function () {
                     return 'b';
                 },
-                $default: function () {
-                    return 'default';
+                $default: function ( action ) {
+                    return 'default: ' + action;
                 }
             },
             b: {
                 $reset: function () {
                     this.bWasReset = true;
                 }.bind(this),
-                test: function () {
-                    return 2;
+                test: function (a, b) {
+                    return b;
                 }
             }
         };
@@ -29,7 +29,7 @@ describe('messageHandler', function () {
     });
     describe('Action handler', function () {
         it('Runs default action if the named one does not exist', function () {
-            expect(this.handler.handleMessage('somithing')).toBe('default');
+            expect(this.handler.handleMessage('somithing')).toBe('default: somithing');
         });
         it('Does nothing when an action does not exist', function () {
             this.handler.setState('b');
@@ -37,17 +37,17 @@ describe('messageHandler', function () {
         });
 
         it('Returns the value for existing action', function () {
-            expect(this.handler.handleMessage('test')).toBe(1);
+            expect(this.handler.handleMessage('test', 'a')).toBe('a');
         });
 
         it('Strips "$" from the action name ', function () {
-            expect(this.handler.handleMessage('$test')).toBe(1);
-            expect(this.handler.handleMessage('test$')).toBe(1);
-            expect(this.handler.handleMessage('$t$e$s$t$')).toBe(1);
+            expect(this.handler.handleMessage('$test', 1)).toBe(1);
+            expect(this.handler.handleMessage('test$', 1)).toBe(1);
+            expect(this.handler.handleMessage('$t$e$s$t$', 2)).toBe(2);
         });
         it('Does not change the state after handling the message', function () {
-            expect(this.handler.handleMessage('test')).toBe(1);
-            expect(this.handler.handleMessage('test')).toBe(1);
+            expect(this.handler.handleMessage('test', 1)).toBe(1);
+            expect(this.handler.handleMessage('test', 1)).toBe(1);
         });
     });
 
@@ -55,7 +55,7 @@ describe('messageHandler', function () {
 
         it('Allows to change the state manually', function () {
             this.handler.setState('b');
-            expect(this.handler.handleMessage('test')).toBe(2);
+            expect(this.handler.handleMessage('test',1, 2)).toBe(2);
         });
 
         it('Resets the state when switching to it', function () {
@@ -66,11 +66,11 @@ describe('messageHandler', function () {
 
         it('Allows to change the state as with a handler', function () {
             this.handler.handleState('next');
-            expect(this.handler.handleMessage('test')).toBe(2);
+            expect(this.handler.handleMessage('test', 1, 2)).toBe(2);
         });
         it('Does nothing when setting current state again', function () {
             this.handler.setState('a');
-            expect(this.handler.handleMessage('test')).toBe(1);
+            expect(this.handler.handleMessage('test', 1)).toBe(1);
         });
         it('Handles different states in different directions', function () {
             this.handler.setState('a');
@@ -78,7 +78,7 @@ describe('messageHandler', function () {
             this.handler.setState('a');
             this.handler.setState('b');
             this.handler.setState('b');
-            expect(this.handler.handleMessage('test')).toBe(2);
+            expect(this.handler.handleMessage('test', 1, 2)).toBe(2);
 
 
         });
